@@ -1,0 +1,59 @@
+- name: Install web server based on OS family
+  hosts: localhost
+  connection: local
+  become: yes
+  vars: 
+    skip_webserver: false
+
+  tasks:
+    - name: Display OS family information
+      ansible.builtin.debug:
+        msg: "Detected OS family: {{ ansible_facts['os_family'] }}"
+
+    - name: Install nginx only on Debian-based systems
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      when:
+        - ansible_facts['os_family'] == 'Debian'
+        - not skip_webserver
+      notify: start nginx
+
+    - name: Install httpd only on RedHat-based systems
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+        update_cache: yes
+      when:
+        - ansible_facts['os_family'] == 'RedHat'
+        - not skip_webserver
+      notify: Start httpd
+
+    - name: Display skip message
+      ansible.builtin.debug:
+        msg: "Web server installation skipped due to skip_webserver variable"
+      when: skip_webserver
+    
+    - name: Display unsupported OS message
+      ansible.builtin.debug:
+        msg: "OS family {{ ansible_facts['os_family'] }} is not supported for web server installation"
+      when:
+        - ansible_facts['os_family'] not in ["Debian", "RedHat"]
+        - not skip_webserver
+
+  handlers:
+    - name: Start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+    
+    - name: Start httpd
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: yes
+
+
+      

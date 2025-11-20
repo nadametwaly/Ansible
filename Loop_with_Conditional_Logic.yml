@@ -1,0 +1,30 @@
+- name: Create user accounts based on active status
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    users:
+      - name: Nada
+        shell: /bin/bash
+        active: True
+
+      - name: Yara
+        shell: /bin/zsh
+        active: false
+
+      - name: Mohamed
+        shell: /bin/sh
+        active: false
+
+      - name: Ahmed
+        shell: /bin/bash
+        active: True
+
+  tasks:
+    - name: Display message for skipped (inactive) users
+      ansible.builtin.debug:
+        msg: "x User '{{ item.name }}' skipped - marked as inactive"
+      loop: "{{ users }}"
+      when: not item.active
+

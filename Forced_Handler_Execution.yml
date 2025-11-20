@@ -1,0 +1,35 @@
+- name: Demonstrate normal vs forced handler execution
+  hosts: localhost
+  connection: local
+
+  tasks: 
+    - name: Scenario 1 - Update config file (natural handler run)
+      copy:
+        content: "version=1"
+        dest: /tmp/demo_config.conf
+      notify: reload config
+
+    - name: Scenario 1 - Debug message (handler NOT triggered yet)
+      debug:
+        msg: "Scenario 1 completed — handler will run at end of play"
+
+
+
+    - name: Scenario 2 - Update config file again
+      copy:
+        content: "version=2"
+        dest: /tmp/demo_config.conf
+      notify: reload config
+
+    - name: Force handler execution now
+      meta: flush_handlers
+
+    - name: Debug AFTER flush (handler has already run)
+      debug:
+        msg: "Handler already executed before this task because of flush_handlers"
+
+
+  handlers:
+    - name: reload config
+      debug:
+        msg: "Configuration reloaded"

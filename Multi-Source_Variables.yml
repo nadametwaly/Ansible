@@ -1,0 +1,18 @@
+- name: Using variables from three different sources
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars: 
+    app_name: myWebApp
+
+  vars_files: 
+    - vars/app_config.yml
+
+  tasks: 
+    - name: Display variables from different sources
+      debug:
+        msg:
+          - "app_name: {{app_name}}"
+          - "app_port: {{app_port}}"
+          - "Environment: {{env}}"

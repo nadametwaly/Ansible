@@ -1,0 +1,27 @@
+- name: Demonstrate conditional tasks with hostname patterns and list membership
+  hosts: localhost
+  connection: local
+
+  vars:
+    allowed_envs:
+      - production
+      - staging
+    env: production   
+
+  tasks:
+    - name: Task for web servers only
+      debug:
+        msg: "This task runs because hostname contains 'web'"
+      when: "'web' in inventory_hostname"
+
+    - name: Run only for production-approved environments
+      debug:
+        msg: "Environment is allowed"
+      when: "'production' in allowed_envs"
+
+    - name: DB task but not in development
+      debug:
+        msg: "DB task running — hostname has 'db' and environment is not development"
+      when:
+        - "'db' in inventory_hostname"
+        - environment != 'development'
