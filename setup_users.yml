@@ -1,0 +1,18 @@
+- name: Setuo users on all servers
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Create a group named developers
+      group:
+        name: developers
+        state: present
+
+    - name: Create a user named john
+      user: 
+        name: john
+        home: /home/john
+        create_home: yes
+        groups: developers
+        shell: /bin/bash
+        state: present

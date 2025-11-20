@@ -1,0 +1,12 @@
+- name: Command and Shell Challenge
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: check disk usage
+      ansible.builtin.command:
+        cmd: df -h
+
+    - name: Second task
+      ansible.builtin.shell:
+        ls /home/ansible | grep .cfg | wc -l

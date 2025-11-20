@@ -1,0 +1,9 @@
+- name: Manage  services
+  hosts: all
+  become: yes
+  tasks:
+    - name: Checks if the SSH service is running on all servers
+      systemd:
+        name: SSH
+        state: started
+        enabled: yes
