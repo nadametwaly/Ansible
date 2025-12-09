@@ -1,0 +1,35 @@
+- name: Complete web servers setup
+  hosts: web_servers
+  become: yes
+  tasks:
+
+    - name: Updates the apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: install apache2
+      ansible.builtin.package:
+        name: apache2
+        state: present
+
+    - name: Creates a custom HTML file
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        owner: ansible
+        content: "<h1>Hello from {{ ansible_hostname }}</h1>"
+
+    - name: Ensures apache2 service is started and enabled
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Check HTTPS endpoint
+      ansible.builtin.uri:
+        url: http://localhost
+        return_content: yes
+      register: web_response
+
+    - name: Show web server response
+      ansible.builtin.debug:
+        msg: "{{ web_response.content }}"
