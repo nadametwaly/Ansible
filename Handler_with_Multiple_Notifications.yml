@@ -1,0 +1,34 @@
+- name: Demonstrate handlers with multiple notifications
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    config_dir: /tmp/myconfigs
+    service_name: nginx   
+
+  tasks:
+    - name: Ensure destination directory exists
+      file:
+        path: "{{ config_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy first configuration file
+      copy:
+        src: myconfigs/config1.txt
+        dest: "{{ config_dir }}/config1.txt"
+      notify: Restart my service
+
+    - name: Copy second configuration file
+      copy:
+        src: myconfigs/config2.txt
+        dest: "{{ config_dir }}/config2.txt"
+      notify: Restart my service
+
+  handlers:
+    - name: Restart my service
+      debug:
+        msg: "Handler triggered: restarting {{ service_name }}"
+
+          

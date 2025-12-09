@@ -1,0 +1,38 @@
+- name: mMnaging multiple applications with their configurations using nested variables
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    apps:
+      - name: "WebApp"
+        port: 8080
+        packages:
+          - httpd
+          - mod_ssl
+          - php
+
+      - name: "DatabaseApp"
+        port: 3306
+        packages:
+          - mariadb-server
+          - mariadb-client
+
+      - name: "CacheApp"
+        port: 6379
+        packages:
+          - redis
+          - python3-redis
+
+  tasks: 
+    - name: print
+      debug:
+        msg: 
+          - "First app name: {{ apps[0].name }}"
+          - "Third package of First app: {{ apps[0].packages[2] }}"
+
+          - "Second app name: {{ apps[1].name }}"
+          - "Second package of second app: {{ apps[1].packages[1] }}"
+
+          - "Third app name: {{ apps[2].name }}"
+          - "First package of Third app: {{ apps[2].packages[0] }}"
+

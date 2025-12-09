@@ -1,0 +1,22 @@
+- name: Dictionary Loop with Transformation
+  hosts: localhost
+  connection: local
+  become: yes
+  vars:
+    services:
+      nginx: started
+      sshd: stopped
+      crond: stopped
+  
+  tasks: 
+    - name: Print each service name and its desired state
+      debug:
+        msg: " service {{ item.key }} should be {{ item.value }} "
+      loop: "{{ services | dict2items }}"
+
+    - name: Ensure services are in desired state
+      service:
+        name: "{{ item.key }}"
+        state: "{{ item.value }}"
+      loop: "{{ services | dict2items }}"
+      ignore_errors: yes
