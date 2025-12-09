@@ -1,0 +1,18 @@
+- name: Secure deployment with encrypted secrets
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  #become: yes 
+
+  vars_files:
+    - secrets.yml
+
+  tasks:
+  - name: Deploy database connection file
+    ansible.builtin.template:
+      src: db_connection.j2
+      dest: /home/nada/db_connection.ini
+      owner: nada
+      group: nada
+      mode: '0600'
+

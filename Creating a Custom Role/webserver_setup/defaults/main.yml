@@ -1,0 +1,4 @@
+#SPDX-License-Identifier: MIT-0
+---
+web_port: 80
+# defaults file for webserver_setup

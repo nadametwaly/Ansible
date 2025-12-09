@@ -1,0 +1,24 @@
+---
+- name: Deploy application configuration using template
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    app_name: MyApp
+    app_version: 1.0.0
+    app_env: dev         # change to dev / staging / prod
+    db_host: localhost
+    db_port: 3306
+    db_user: appuser
+
+  tasks:
+
+    - name: Deploy configuration file to /tmp/app_config.ini
+      ansible.builtin.template:
+        src: app_config.j2
+        dest: /tmp/app_config.ini
+
+    - name: Show result path
+      ansible.builtin.debug:
+        msg: "Configuration deployed to /tmp/app_config.ini"

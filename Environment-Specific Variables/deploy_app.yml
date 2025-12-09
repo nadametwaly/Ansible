@@ -1,0 +1,21 @@
+---
+- name: Deploy application with environment-specific variables
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    env: dev   # default value (can be overridden with -e "environment=staging")
+
+  tasks:
+
+    - name: Load environment-specific variables
+      ansible.builtin.include_vars:
+        file: "vars_{{ env }}.yml"
+
+    - name: Display loaded variables
+      ansible.builtin.debug:
+        msg:
+          - "App port: {{ app_port }}"
+          - "Database host: {{ db_host }}"
+          - "Log level: {{ log_level }}"

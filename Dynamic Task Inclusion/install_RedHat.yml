@@ -1,0 +1,7 @@
+---
+- name: Install packages on RedHat-based system
+  ansible.builtin.yum:
+    name:
+      - curl
+      - git
+    state: present

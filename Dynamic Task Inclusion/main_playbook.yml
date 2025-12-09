@@ -1,0 +1,11 @@
+---
+- name: Install packages based on OS family
+  hosts: localhost
+  gather_facts: yes   
+  connection: local
+  become: yes
+
+  tasks:
+
+    - name: Include OS-specific task file
+      ansible.builtin.include_tasks: "install_{{ ansible_facts['os_family'] }}.yml"

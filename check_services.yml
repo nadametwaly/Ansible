@@ -1,0 +1,43 @@
+---
+- name: Check if services exist and report status
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+    - name: Check nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: started
+      register: nginx_result
+      ignore_errors: true
+
+    - name: Report nginx status
+      ansible.builtin.debug:
+        msg: >
+          Nginx service {{ 'FOUND (started successfully)' if not nginx_result.failed else 'NOT FOUND or failed to start' }}
+
+    - name: Check apache2 service
+      ansible.builtin.service:
+        name: apache2
+        state: started
+      register: apache_result
+      ignore_errors: true
+
+    - name: Report apache2 status
+      ansible.builtin.debug:
+        msg: >
+          Apache2 service {{ 'FOUND (started successfully)' if not apache_result.failed else 'NOT FOUND or failed to start'}}
+
+    - name: Check mysql service
+      ansible.builtin.service:
+        name: mysql
+        state: started
+      register: mysql_result
+      ignore_errors: true
+
+    - name: Report mysql status
+      ansible.builtin.debug:
+        msg: >
+          MySQL service {{ 'FOUND (started successfully)' if not mysql_result.failed else 'NOT FOUND or failed to start' }}

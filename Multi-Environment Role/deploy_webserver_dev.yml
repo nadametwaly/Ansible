@@ -1,0 +1,10 @@
+---
+- name: Deploy Webserver - Dev environment
+  hosts: localhost
+  connection: local
+  become: yes
+
+  roles:
+    - role: webserver_setup
+      vars:
+        env: dev

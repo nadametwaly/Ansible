@@ -1,0 +1,11 @@
+---
+- name: Deploy webserver using webserver_setup role
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    web_port: 8080   # override default port
+
+  roles:
+    - webserver_setup

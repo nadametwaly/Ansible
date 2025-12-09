@@ -1,0 +1,3 @@
+app_port: 8081
+db_host: staging-db.example.com
+log_level: info

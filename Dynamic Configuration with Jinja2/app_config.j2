@@ -1,0 +1,17 @@
+[application]
+name = {{ app_name }}
+version = {{ app_version }}
+
+[environment]
+env = {{ app_env }}
+
+[database]
+host = {{ db_host }}
+port = {{ db_port }}
+username = {{ db_user }}
+
+{% if app_env == "dev" %}
+[debug]
+enabled = true
+log_level = debug
+{% endif %}

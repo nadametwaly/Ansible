@@ -1,0 +1,28 @@
+---
+- name: Create users configuration file
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    users:
+      - name: nada
+        email: nada@example.com
+        role: admin
+      - name: ahmed
+        email: ahmed@example.com
+        role: developer
+      - name: sara
+        email: sara@example.com
+        role: tester
+
+  tasks:
+
+    - name: Deploy users configuration file
+      ansible.builtin.template:
+        src: users.conf.j2
+        dest: /tmp/users.conf
+
+    - name: Show output path
+      ansible.builtin.debug:
+        msg: "User configuration generated at /tmp/users.conf"

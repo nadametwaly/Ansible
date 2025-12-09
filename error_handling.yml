@@ -1,0 +1,32 @@
+- name: Demonstrate error handling with block, rescue, and always
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+    - name: Main task with error handling
+      block:
+
+        - name: Create directory /tmp/test_dir
+          ansible.builtin.file:
+            path: /tmp/test_dir
+            state: directory
+
+        - name: Attempt to copy a non-existent file (this will fail)
+          ansible.builtin.copy:
+            src: /tmp/no_such_file.txt
+            dest: /tmp/test_dir/no_such_file.txt
+
+      rescue:
+
+        - name: Create an error message file instead
+          ansible.builtin.copy:
+            dest: /tmp/test_dir/error.txt
+            content: "The original file could not be copied. Error handled in rescue section."
+
+      always:
+
+        - name: Display final status
+          ansible.builtin.debug:
+            msg: "Playbook completed. Check /tmp/test_dir for output."
